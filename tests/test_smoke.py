@@ -13,7 +13,7 @@ import pytest
 from hamcrest import is_, assert_that, contains, has_property, all_of, has_entry, greater_than, less_than, has_entries, contains_inanyorder, is_not, has_items
 from allure.constants import Status
 
-from conftest import has_float
+from .conftest import has_float
 
 
 @pytest.mark.parametrize('statement', [

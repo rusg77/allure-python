@@ -9,7 +9,7 @@ Created on Oct 19, 2013
 
 from hamcrest import has_property, assert_that, contains
 from hamcrest.core.core.allof import all_of
-from allure.utils import present_exception, unicodify
+from allure.utils import present_exception
 
 
 def test_cyrillic_desc(report_for):
@@ -39,10 +39,6 @@ def test_cyrillic_exc(report_for):
 E       Exception: русские буквы
 
 test_cyrillic_exc.py:3: Exception'''))))
-
-
-def test_unicodify_no_breaks_stuff():
-    assert unicodify('<">') == '<">'
 
 
 def test_complex_exc_xmld_ok():

@@ -12,7 +12,7 @@ from pytest import allure  # @UnresolvedImport
 def test_with_print():
     'this one prinst stuff to stdout'
 
-    print 'Hello'
+    print('Hello')
 
 
 def test_with_stderr():

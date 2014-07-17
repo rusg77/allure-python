@@ -122,7 +122,7 @@ def recordtype(typename, field_names, default=NO_DEFAULT, rename=False,
 
     _check_name(typename, is_type_name=True)
 
-    if isinstance(field_names, basestring):
+    if isinstance(field_names, str):
         # No per-field defaults. So it's like a namedtuple, but with
         #  a possible default value.
         field_names = field_names.replace(',', ' ').split()
@@ -130,7 +130,7 @@ def recordtype(typename, field_names, default=NO_DEFAULT, rename=False,
     # If field_names is a Mapping, change it to return the
     #  (field_name, default) pairs, as if it were a list
     if isinstance(field_names, _Mapping):
-        field_names = field_names.items()
+        field_names = list(field_names.items())
 
     # Parse and validate the field names.  Validation serves two
     #  purposes: generating informative error messages and preventing
@@ -141,7 +141,7 @@ def recordtype(typename, field_names, default=NO_DEFAULT, rename=False,
 
     seen_names = set()
     for idx, field_name in enumerate(field_names):
-        if isinstance(field_name, basestring):
+        if isinstance(field_name, str):
             field_name = _check_field_name(field_name, seen_names, rename,
                                            idx)
             fields.add_without_default(field_name)
@@ -251,7 +251,7 @@ def recordtype(typename, field_names, default=NO_DEFAULT, rename=False,
         namespace[_default_name(name)] = default
 
     try:
-        exec template in namespace
+        exec(template, namespace)
     except SyntaxError as e:
         raise SyntaxError(e.message + ':\n' + template)
 

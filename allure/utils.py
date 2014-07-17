@@ -58,18 +58,18 @@ _legal_ranges = (
     (0xE000, 0xFFFD),
     (0x10000, 0x10FFFF),
 )
-_legal_xml_re = [unicode("%s-%s") % (unichr(low), unichr(high)) for (low, high) in _legal_ranges if low < sys.maxunicode]
-_legal_xml_re = [unichr(x) for x in _legal_chars] + _legal_xml_re
-illegal_xml_re = re.compile(unicode('[^%s]') % unicode('').join(_legal_xml_re))
+_legal_xml_re = ["%s-%s" % (chr(low), chr(high)) for (low, high) in _legal_ranges if low < sys.maxunicode]
+_legal_xml_re = [chr(x) for x in _legal_chars] + _legal_xml_re
+illegal_xml_re = re.compile('[^%s]' % str('').join(_legal_xml_re))
 
 
 def legalize_xml(arg):
     def repl(matchobj):
         i = ord(matchobj.group())
         if i <= 0xFF:
-            return unicode('#x%02X') % i
+            return '#x%02X' % i
         else:
-            return unicode('#x%04X') % i
+            return '#x%04X' % i
     return illegal_xml_re.sub(repl, arg)
 
 
@@ -79,15 +79,8 @@ class Element(Rule):
         self.namespace = namespace
 
     def value(self, name, what):
-        if not isinstance(what, basestring):
+        if not isinstance(what, str):
             return self.value(name, str(what))
-
-        if not isinstance(what, unicode):
-            try:
-                what = unicode(what, 'utf-8')
-            except UnicodeDecodeError:
-                what = unicode(what, 'utf-8', errors='replace')
-
         return element_maker(self.name or name, self.namespace)(legalize_xml(what))
 
 
@@ -114,7 +107,7 @@ class Many(Rule):
 
 
 def xmlfied(el_name, namespace='', fields=[], **kw):
-    items = fields + kw.items()
+    items = fields + list(kw.items())
 
     class MyImpl(recordtype('XMLFied', [(item[0], None) for item in items])):
         def toxml(self):
@@ -147,7 +140,7 @@ def parents_of(item):
 
 
 def parent_module(item):
-    return filter(lambda x: isinstance(x, Module), parents_of(item))[0]
+    return next(filter(lambda x: isinstance(x, Module), parents_of(item)))
 
 
 def parent_down_from_module(item):
@@ -185,23 +178,7 @@ def all_of(enum):
     """
     returns list of name-value pairs for ``enum`` from :py:mod:`allure.constants`
     """
-    return filter(lambda (n, v): not n.startswith('_'), inspect.getmembers(enum))
-
-
-def unicodify(something):
-    def convert(x):
-        try:
-            return unicode(x)
-        except UnicodeDecodeError:
-            return unicode(x, 'utf-8', errors='replace')
-
-    try:
-        return convert(something)  # @UndefinedVariable
-    except TypeError:
-        try:
-            return convert(str(something))  # @UndefinedVariable
-        except UnicodeEncodeError:
-            return convert('<nonpresentable %s>' % type(something))  # @UndefinedVariable
+    return [n_v for n_v in inspect.getmembers(enum) if not n_v[0].startswith('_')]
 
 
 def present_exception(e):
@@ -209,9 +186,9 @@ def present_exception(e):
     Try our best at presenting the exception in a readable form
     """
     if not isinstance(e, SyntaxError):
-        return unicodify('%s: %s' % (type(e).__name__, unicodify(e)))
+        return '%s: %s' % (type(e).__name__, str(e))
     else:
-        return unicodify(format_exception_only(e))
+        return format_exception_only(e)
 
 
 def get_exception_message(report):

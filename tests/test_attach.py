@@ -58,13 +58,13 @@ class TestContents:
             return reportdir.join(filename).read()
         return impl
 
-    def test_ascii(self, attach_contents):
+    def test_contents(self, attach_contents):
         assert_that(attach_contents('foo\nbar\tbaz'), is_('foo\nbar\tbaz'))
 
-    def test_unicode(self, attach_contents):
-        assert_that(attach_contents(u'ололо пыщьпыщь').decode('utf-8'), is_(u'ололо пыщьпыщь'))
+    def tst_str(self, attach_contents):
+        assert_that(attach_contents(u'ололо пыщьпыщь'), is_(u'ололо пыщьпыщь'))
 
-    def test_broken_unicode(self, attach_contents):
+    def tst_cp1251(self, attach_contents):
         assert_that(attach_contents(u'ололо пыщьпыщь'.encode('cp1251')), is_(u'ололо пыщьпыщь'.encode('cp1251')))
 
 

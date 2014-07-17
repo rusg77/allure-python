@@ -15,7 +15,7 @@ def test_inline_step(fail):
     has two steps right iside of it
     """
     with pytest.allure.step('First step'):  # @UndefinedVariable
-        print 'OLOLO in first step'
+        print('OLOLO in first step')
 
     with pytest.allure.step('Second step that fails'):  # @UndefinedVariable
         assert fail

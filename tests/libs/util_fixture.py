@@ -16,4 +16,4 @@ class allure_test_fixture_impl():
 
     @allure.step('allure_test_fixture_step')
     def test(self):
-        print "Hello"
+        print("Hello")

@@ -187,10 +187,7 @@ class AllureImpl(object):
 
         # FIXME: we should generate attachment name properly
         with self._attachfile("%s-attachment.%s" % (uuid.uuid4(), attach_type)) as f:
-            if isinstance(body, unicode):
-                f.write(body.encode('utf-8'))
-            else:
-                f.write(body)
+            f.write(body)
             return os.path.basename(f.name)
 
     @contextmanager
@@ -222,4 +219,4 @@ class AllureImpl(object):
             logfile.close()
 
     def _write_suite(self, logfile, suite):
-        logfile.write(etree.tostring(suite.toxml(), pretty_print=True, xml_declaration=False, encoding=unicode))
+        logfile.write(etree.tostring(suite.toxml(), pretty_print=True, xml_declaration=False, encoding='utf-8').decode('utf-8'))
