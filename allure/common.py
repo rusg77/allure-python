@@ -187,7 +187,7 @@ class AllureImpl(object):
 
         # FIXME: we should generate attachment name properly
         with self._attachfile("%s-attachment.%s" % (uuid.uuid4(), attach_type)) as f:
-            f.write(body)
+            f.write(body.encode('utf-8'))
             return os.path.basename(f.name)
 
     @contextmanager

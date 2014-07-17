@@ -188,7 +188,7 @@ def present_exception(e):
     if not isinstance(e, SyntaxError):
         return '%s: %s' % (type(e).__name__, str(e))
     else:
-        return format_exception_only(e)
+        return format_exception_only(SyntaxError, e)
 
 
 def get_exception_message(report):

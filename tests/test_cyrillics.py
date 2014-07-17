@@ -43,3 +43,7 @@ test_cyrillic_exc.py:3: Exception'''))))
 
 def test_complex_exc_xmld_ok():
     assert 'Exception' in present_exception(Exception(u'Помогите'.encode('cp1251')))
+
+
+def test_syntax_error_presentation():
+    assert 'SyntaxError: Помогите\n' in present_exception(SyntaxError('Помогите'))
